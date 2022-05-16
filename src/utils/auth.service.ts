@@ -2,8 +2,9 @@ import { BehaviorSubject } from "rxjs";
 import { get, post, put } from "./http/httpMethods";
 import Cookie from "js-cookie";
 import history from "../routes/history";
+import { useHistory } from "react-router-dom";
 import { paths } from "../routes/routes.config";
-import { showErrorToast } from "./toastUtil";
+import { showErrorToast, showSuccessToast } from "./toastUtil";
 import { defaultUsers } from "../@types/user";
 
 let currentUserFromStorage: any;
@@ -49,12 +50,13 @@ export const authenticationService = {
   localLogout,
   resendOTP,
   unsubscribeAll,
+  sendVerification,
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() {
     return currentUserSubject.value;
   },
   
-  currentOrganization: currentOrganizationSubject.asObservable(), 
+  currentOrganization: currentOrganizationSubject.asObservable(),
   get currentOrganizationValue() {
     return currentOrganizationSubject.value;
   },
@@ -64,25 +66,32 @@ export const authenticationService = {
  * Verify OTP method
  */
 function verifyCredentials(payload: any) {
+ 
 
-  return new Promise((resolve, reject) => {
-    handleLogin({ token: "AABBCC", user: defaultUsers[0] });
-    resolve(true);
-  });
-  // return post('/api/auth/login', payload)
-  //     .then((response: any) => {
-  //       //   handleLogin(response)
-  //         handleLogin({ token: "AABBCC", user: defaultUsers[0] });
-  //         return response
-  //     })
-  //     .catch((error: any) => {
-  //       //   showErrorToast(
-  //       //       error.message || 'Error occurred while validating credentials!'
-  //       //   )
-  //         handleLogin({ token: "AABBCC", user: defaultUsers[0] });
-  //         return error
-  //     })
+
+  // return new Promise((resolve, reject) => {
+  //   handleLogin({ token: "AABBCC", user: defaultUsers[0] });
+  //   resolve(true);
+  // });
+
+  return post("http://192.168.0.170:8080/auth/login", payload)
+    .then((response: any) => {
+      //   handleLogin(response)
+      showSuccessToast(" 'You are successfully logged in'");
+      handleLogin({ token: response.token, user: response.user });
+      
+      return response;
+    })
+    .catch((error: any) => {
+      showErrorToast(
+        error.message || "Error occurred while validating credentials!"
+      );
+      // handleLogin({ token: "AABBCC", user: defaultUsers[0] });
+      return error;
+    });
 }
+
+
 
 /*
  * Verify OTP method
@@ -155,12 +164,18 @@ function authToken() {
 /*
  * Register user method
  */
+// function register(payload: any) {
+//   return post("/api/user/sign-up", payload).then((response: any) => {
+//     // handleLogin(response)
+//     return response;
+//   });
+// }
+
 function register(payload: any) {
-  return post("/api/user/sign-up", payload).then((response: any) => {
-    // handleLogin(response)
-    return response;
-  });
+  return post("http://192.168.0.170:8080/auth/register", payload)
+   
 }
+
 
 /*
  * Set new password
@@ -204,9 +219,11 @@ function isUserAndTokenAvailable() {
  */
 function loadCurrentUser() {
   get(`/api/auth/self`).then((response: any) => {
+
     localStorage.setItem("currentUser", JSON.stringify(response));
     currentUserSubject.next(response);
     currentOrganizationSubject.next(response._org[0]);
+
   });
 }
 
@@ -221,10 +238,24 @@ function handleLogin(response: any) {
 
   currentUserSubject.next(response.user);
 
-  currentOrganizationSubject.next(response.user._org[0]);
+  // currentOrganizationSubject.next(response.user._org[0]);
 
   if (response.user && !response.user._pre) {
     history.push(paths.home);
-    window.location.reload();
+    // window.location.reload();
   }
+}
+
+
+//send verification mail
+
+function sendVerification(payload: any) {
+  
+  return post("http://192.168.0.170:8080/auth/send-verification-email", {
+    headers: {
+      authorization:payload
+    },
+
+  });
+
 }

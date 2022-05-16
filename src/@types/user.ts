@@ -16,7 +16,7 @@ export const defaultUsers: User[] = [
     lastName: "Jadhav",
     role: "Admin",
     email: "navanath@angularminds.com",
-    _org: [{ name: "Angular Minds", _id: "11111" }],
+    _org: [{ name: "Angular Minds", _id: "11111" }],  
   },
   {
     _id: "002",
