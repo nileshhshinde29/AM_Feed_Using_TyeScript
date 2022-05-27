@@ -14,6 +14,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { authenticationService } from "../../../utils/auth.service";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { json } from "stream/consumers";
+import {  useHistory } from "react-router-dom";
+import { Card } from "@mui/material";
+import { GoogleLogin } from "react-google-login";
+import { maxWidth } from "@mui/system";
+
+
 
 type mytypes = {
   password: string;
@@ -22,6 +28,8 @@ type mytypes = {
 };
 
 export default function Login({}) {
+  
+  const history = useHistory()
   // Initial hooks
   const [isButtonDisabled, setButtonDisabled] = useState(false);
 
@@ -79,27 +87,47 @@ export default function Login({}) {
 
    */
   return (
-    <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+    <Card
+      sx={{
+        maxWidth: "512px",
+        boxShadow: "6px 6px 43px 8px rgba(33, 43, 54, 0.2)",
+      }}
+      className="outerDiv"
+    >
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
           <Box
-            component="form"
-            // onSubmit={() => handleSubmit(doLogin)}
-            noValidate
-            sx={{ mt: 1 }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
+            <Typography
+              sx={{
+                fontWeight: "bold",
+                fontSize: "24px",
+                margin: "24px 0 15px 0",
+              }}
+              component="h1"
+              variant="h5"
+            >
+              Sign in to Social Feed
+            </Typography>
+            <Box
+              component="form"
+              // onSubmit={() => handleSubmit(doLogin)}
+              noValidate
+              sx={{ mt: 1 }}
+            >
               <TextField
+                sx={{
+                  width: "480px",
+                  maxHeight: "48px",
+                  margin: "24px 0 24px 0",
+                }}
+                // size={"small"}
                 margin="normal"
                 required
                 fullWidth
@@ -112,7 +140,7 @@ export default function Login({}) {
                     message: "invalid email address",
                   },
                 })}
-                label="Email Address"
+                label="Email"
                 name="email"
                 autoComplete="email"
                 autoFocus
@@ -121,7 +149,13 @@ export default function Login({}) {
               />
 
               <TextField
+                sx={{
+                  maxWidth: "480px",
+                  height: "48px",
+                  margin: "24px 0 24px 0",
+                }}
                 margin="normal"
+                // size={"small"}
                 required
                 fullWidth
                 label="Password"
@@ -132,7 +166,8 @@ export default function Login({}) {
                 {...register("password", {
                   required: "please enter your password",
                   pattern: {
-                    value:/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+                    value:
+                      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
                     message: "invalid password",
                   },
                 })}
@@ -140,33 +175,112 @@ export default function Login({}) {
                 error={Boolean(errors.password)}
                 helperText={errors.password?.message}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
+              {/* <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            /> */}
               <LoadingButton
                 onClick={handleSubmit(doLogin)}
                 type="button"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{
+                  mt: 3,
+                  
+                  maxWidth: "480px",
+                  height: "48px",
+                  backgroundColor: "#1890FF",
+                }}
                 loading={isButtonDisabled}
               >
                 Sign In
               </LoadingButton>
               <Grid container>
                 <Grid item xs>
-                  <Link variant="body2">Forgot password?</Link>
+                  {/* <Link
+                    onClick={() => {
+                      return history.push("/auth/forgotpassword");
+                    }}
+                    variant="body2"
+                  >
+                   
+                  </Link> */}
                 </Grid>
                 <Grid item>
-                  <Link href='/auth/signup' variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link
+                    sx={{
+                      fontSize: "16px",
+                      marginRight:"16px",
+                      color: "#637381",
+                      textDecoration: "none",
+                    }}
+                    href="/auth/signup"
+                    variant="body2"
+                  >
+                    {" Forgot password ?"}
                   </Link>
                 </Grid>
               </Grid>
+              <Grid container>
+                <Grid
+                  marginTop={"32px"}
+                  sx={{
+                    fontSize: "16px",
+                    color: "#637381",
+                    textDecoration: "none",
+                  }}
+                  item
+                  xs
+                >
+                  {" Don't have an account? "}
+                  <Link
+                    sx={{ textDecoration: "none" }}
+                    onClick={() => {
+                      return history.push("/auth/forgotpassword");
+                    }}
+                    variant="body2"
+                  >
+                    Sign Up
+                  </Link>
+                </Grid>
+                <Grid item>
+                  {/* <Link href="/auth/signup" variant="body2">
+                    {" Forgot password ?"}
+                  </Link> */}
+                </Grid>
+              </Grid>
+              <div
+                style={{
+                  width: "100%",
+                  height: "13px",
+                  margin: "32px 0 32px 0",
+                  borderBottom: "1px solid #919EAB"
+,
+                  textAlign: "center",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: " 14px",
+                    color: "#637381",
+                    backgroundColor: " #ffffff",
+                    padding: " 0 10px",
+                  }}
+                >
+                  OR
+                </span>
+              </div>
+              <div style={{ marginLeft: "30%", marginRight: "auto" }}>
+                <GoogleLogin
+                // clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                // onSuccess={responseGoogle}
+                // isSignedIn={true}
+                />
+              </div>
+            </Box>
           </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
+    </Card>
   );
 }

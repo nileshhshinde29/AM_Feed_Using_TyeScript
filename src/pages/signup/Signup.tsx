@@ -4,12 +4,14 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { Button } from "@mui/material";
+import { Button, Link, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { padding } from "@mui/system";
 import { authenticationService } from "../../utils/auth.service";
 import { Height } from "@mui/icons-material";
-
+import { useState } from "react";
+import likesSmaily from "../../Images/likesSmaily.jpeg";
+import "../../App.css";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -28,13 +30,15 @@ interface Provider {
 }
 
 export default function FullWidthGrid() {
-  const [error, setError] = React.useState("");
+  const [image, setImage] = useState([]);
+  console.log(image);
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
+    setError,
     getValues,
     setValue,
   } = useForm({
@@ -47,45 +51,58 @@ export default function FullWidthGrid() {
     },
   });
 
-
   const sendVerificationMail = (token: any) => {
-    console.log(token)
-
-    authenticationService.sendVerification(token)
-
-  }
-
+    authenticationService.sendVerification(token);
+  };
 
   // signup function triger on submmit button
 
   const Signup = (data: any) => {
     authenticationService
       .register(data)
-      .then((response) => {
-        console.log(response);
-
-        // sendVerificationMail(response.token)
-
+      .then((response: any) => {
+        sendVerificationMail(response.token);
       })
       .catch((err) => {
-        setError(err.message);
+        setError("email", { type: "custom", message: err.message });
       });
   };
 
   return (
     <div>
-      <Box
+      <Paper
         sx={{
-          flexGrow: 1,
-          margin: "100px 30% 0 30%",
-          border: "4px solid #d9d9d9",
-          padding: "30px",
-          borderRadius: "5px",
+          boxShadow: "6px 6px 43px 8px rgba(33, 43, 54, 0.2)",
+          // backgroundColor: "rgba(255, 255, 255, .15)",
+          // flexGrow: 1,
+          margin: "100px auto 0 auto",
+          // border: "4px solid #d9d9d9",
+          padding: "16px",
+          // borderRadius: "5px",
+
+          maxWidth: "512px",
         }}
       >
-        <h4>Sign up</h4>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12} lg={6} xl={6}>
+        <Typography
+          sx={{ 
+
+            fontWeight: "bold",
+            fontSize: "24px",
+            margin: "24px auto 15px 22%",
+          }}
+          component="h1"
+          variant="h5"
+        >
+          Sign up to Social Feed
+        </Typography>
+
+        <br />
+
+        {/* <Grid item container xs={12} md={12} lg={6} xl={6}>
+            <img src={likesSmaily} style={{width:"100%", height:"auto"}} />
+          </Grid> */}
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <TextField
               required
               fullWidth
@@ -104,7 +121,7 @@ export default function FullWidthGrid() {
               helperText={errors.firstname?.message}
             />
           </Grid>
-          <Grid item xs={12} md={12} lg={6} xl={6}>
+          <Grid item xs={12} md={6} lg={6} xl={6}>
             <TextField
               required
               fullWidth
@@ -135,7 +152,7 @@ export default function FullWidthGrid() {
                   message: "invalid email address",
                 },
               })}
-              label="Email Address"
+              label="Email Id"
               name="email"
               autoComplete="email"
               autoFocus
@@ -165,16 +182,40 @@ export default function FullWidthGrid() {
             />
           </Grid>
           <Grid item xs={12} md={12}>
-            <p style={{ color: "red", backgroundColor: "#FFD2D2" }}>{error}</p>
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ backgroundColor: "#1890FF" }}
+              onClick={handleSubmit(Signup)}
+            >
+              {" "}
+              Submit
+            </Button>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Button onClick={handleSubmit(Signup)}> Submit</Button>
+          <Grid
+            margin={"20px 0 20px 0"}
+            sx={{
+              fontSize: "16px",
+              color: "#637381",
+              textDecoration: "none",
+            }}
+            item
+            xs
+          >
+            {"Already having an account? "}
+            <Link sx={{ textDecoration: "none" }} variant="body2">
+              Sign in
+            </Link>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <Button href="/auth/login">go to login page</Button>
-          </Grid>
+
+          {/* <Grid item xs={12} md={6}>
+              <Button onClick={handleSubmit(Signup)}> Submit</Button>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Button href="/auth/login">go to login page</Button>
+            </Grid> */}
         </Grid>
-      </Box>
+      </Paper>
     </div>
   );
 }

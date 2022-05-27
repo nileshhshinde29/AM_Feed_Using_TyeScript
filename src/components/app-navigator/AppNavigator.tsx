@@ -13,7 +13,6 @@ import { authenticationService } from "../../utils/auth.service";
 type my = {
 
   
-  history: BrowserHistory<any>;
 
 }
 
@@ -21,7 +20,7 @@ export const AppNavigator = (props: my) => {
 
 
   return (
-    <Router history={history}>
+    <Router history={history}>  
       <Switch>
         <Redirect key="default" exact from="/" to={paths.home}></Redirect>
      

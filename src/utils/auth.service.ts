@@ -1,8 +1,8 @@
 import { BehaviorSubject } from "rxjs";
 import { get, post, put } from "./http/httpMethods";
 import Cookie from "js-cookie";
+import Cookies from "js-cookie";
 import history from "../routes/history";
-import { useHistory } from "react-router-dom";
 import { paths } from "../routes/routes.config";
 import { showErrorToast, showSuccessToast } from "./toastUtil";
 import { defaultUsers } from "../@types/user";
@@ -46,16 +46,18 @@ export const authenticationService = {
   setPassword,
   isUserAndTokenAvailable,
   verifyOTP,
+  AddPost,
   handleLogin,
   localLogout,
   resendOTP,
   unsubscribeAll,
+  forgotPassword,
   sendVerification,
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() {
     return currentUserSubject.value;
   },
-  
+
   currentOrganization: currentOrganizationSubject.asObservable(),
   get currentOrganizationValue() {
     return currentOrganizationSubject.value;
@@ -92,12 +94,23 @@ function verifyCredentials(payload: any) {
 }
 
 
-
+//* Sent mail when forgot password
+function forgotPassword(payload: any) {
+    
+  return post(
+    "http://192.168.0.170:8080/auth/forgot-password",
+    payload
+  );
+}
+  
 /*
  * Verify OTP method
  */
 function requestPasswordReset(payload: any) {
-  return post("/api/user/password/reset", payload).then((response: any) => {
+  console.log(payload.obj)
+  return post(
+    `http://192.168.0.170:8080/auth/reset-password?token=${payload.token}`,payload.obj
+  ).then((response: any) => {
     return response;
   });
 }
@@ -116,7 +129,8 @@ function unsubscribeAll() {
 function logout() {
   return get(`/api/auth/logout`)
     .then((response) => {
-      // remove user from local storage to log user out
+      // remove user from local storage to log user out 
+
       localStorage.removeItem("currentUser");
 
       Cookie.remove("_token", { path: "/" });
@@ -182,7 +196,7 @@ function register(payload: any) {
  */
 function setPassword(payload: any, token: string) {
   return put("/api/user/password", payload, {
-    headers: { Authorization: `${token}` },
+    headers: { Authorization: `${token}`},
   }).then((response: any) => {
     return response;
   });
@@ -247,15 +261,30 @@ function handleLogin(response: any) {
 }
 
 
-//send verification mail
+//* send verification mail
 
 function sendVerification(payload: any) {
-  
-  return post("http://192.168.0.170:8080/auth/send-verification-email", {
+  console.log(payload)
+  return post("http://192.168.0.170:8080/auth/send-verification-email",{}, {
     headers: {
-      authorization:payload
+      Authorization: "Bearer " + payload,
     },
-
   });
-
 }
+
+//* Add post 
+
+function AddPost(payload: any) {
+  
+
+  return post(
+    "http://localhost:8080/posts",
+    {},
+    {
+      headers: {
+        Authorization: Cookies.get("_token"),
+      },
+    }
+  );
+}
+
