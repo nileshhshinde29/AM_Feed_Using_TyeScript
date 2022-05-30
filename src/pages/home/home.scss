@@ -1,0 +1,34 @@
+.container{
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-top: 80px;
+   
+}
+.card{
+     width: 450px  ;
+    height: 630px ;
+    // background-color: aquamarine !important;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2) !important
+}
+.img{
+    // box-shadow: 0 0 8px 8px rgb(175, 24, 24) inset;
+}
+.caption{
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+.caption1{
+    
+ margin-right: 10px !important;   
+ font-family: sans-serif  ;
+// Font-style:  sans-serif
+font-size: 14px;
+line-height: 22px;
+font-weight: bold !important;
+// Line height: 134%
+// Align: Left
+// Vertical align: Top
+}

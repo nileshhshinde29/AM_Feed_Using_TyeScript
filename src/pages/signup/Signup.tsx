@@ -4,13 +4,15 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { Button, Link, Typography } from "@mui/material";
+import { Button, FormControl, IconButton, InputLabel, Link, OutlinedInput, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { padding } from "@mui/system";
 import { authenticationService } from "../../utils/auth.service";
-import { Height } from "@mui/icons-material";
+import { Height, Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import likesSmaily from "../../Images/likesSmaily.jpeg";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import InputAdornment from "@mui/material/InputAdornment";
 import "../../App.css";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -28,8 +30,22 @@ interface Provider {
   first_name: string;
   last_name: string;
 }
+interface State {
+  amount: string;
+  password: string;
+  weight: string;
+  weightRange: string;
+  showPassword: boolean;
+}
 
 export default function FullWidthGrid() {
+   const [values, setValues] = React.useState<State>({
+     amount: "",
+     password: "",
+     weight: "",
+     weightRange: "",
+     showPassword: false,
+   });
   const [image, setImage] = useState([]);
   console.log(image);
 
@@ -67,6 +83,23 @@ export default function FullWidthGrid() {
         setError("email", { type: "custom", message: err.message });
       });
   };
+  const handleChange =
+    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setValues({ ...values, [prop]: event.target.value });
+    };
+
+  const handleClickShowPassword = () => {
+    setValues({
+      ...values,
+      showPassword: !values.showPassword,
+    });
+  };
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
 
   return (
     <div>
@@ -77,6 +110,7 @@ export default function FullWidthGrid() {
           // flexGrow: 1,
           margin: "100px auto 0 auto",
           // border: "4px solid #d9d9d9",
+          borderRadius: "8px",
           padding: "16px",
           // borderRadius: "5px",
 
@@ -84,8 +118,7 @@ export default function FullWidthGrid() {
         }}
       >
         <Typography
-          sx={{ 
-
+          sx={{
             fontWeight: "bold",
             fontSize: "24px",
             margin: "24px auto 15px 22%",
@@ -106,6 +139,8 @@ export default function FullWidthGrid() {
             <TextField
               required
               fullWidth
+              // size="48px"
+              sx={{ height: "48px" }}
               id="first_name"
               {...register("firstname", {
                 required: "please enter name",
@@ -161,8 +196,9 @@ export default function FullWidthGrid() {
             />
           </Grid>
           <Grid item xs={12} md={12}>
-            <TextField
+            {/* <TextField
               required
+              style={{ position: "relative" }}
               fullWidth
               label="Password"
               type="password"
@@ -179,7 +215,42 @@ export default function FullWidthGrid() {
               name="password"
               error={Boolean(errors.password)}
               helperText={errors.password?.message}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    edge="end"
+                  >
+                    <VisibilityIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
             />
+            <VisibilityIcon style={{ position: "absolute" }} /> */}
+            <FormControl   fullWidth variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                onChange={handleChange("password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+            </FormControl>
           </Grid>
           <Grid item xs={12} md={12}>
             <Button
