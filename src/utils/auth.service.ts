@@ -1,5 +1,5 @@
 import { BehaviorSubject } from "rxjs";
-import { get, post, put } from "./http/httpMethods";
+import { get, patch, post, put } from "./http/httpMethods";
 import Cookie from "js-cookie";
 import Cookies from "js-cookie";
 import history from "../routes/history";
@@ -45,6 +45,8 @@ export const authenticationService = {
   requestPasswordReset,
   setPassword,
   isUserAndTokenAvailable,
+  replyToComment,
+  likeToComment,
   verifyOTP,
   AddPost,
   handleLogin,
@@ -53,6 +55,12 @@ export const authenticationService = {
   unsubscribeAll,
   forgotPassword,
   sendVerification,
+  likeToReply,
+  addComment,
+  getPosts,
+  like,
+  savePost,
+  getSavedPosts,
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() {
     return currentUserSubject.value;
@@ -79,6 +87,7 @@ function verifyCredentials(payload: any) {
   return post("http://192.168.0.170:8080/auth/login", payload)
     .then((response: any) => {
       //   handleLogin(response)
+      console.log(response.token)
       showSuccessToast(" 'You are successfully logged in'");
       handleLogin({ token: response.token, user: response.user });
       
@@ -256,7 +265,7 @@ function handleLogin(response: any) {
 
   if (response.user && !response.user._pre) {
     history.push(paths.home);
-    // window.location.reload();
+    window.location.reload();
   }
 }
 
@@ -276,10 +285,10 @@ function sendVerification(payload: any) {
 
 function AddPost(payload: any) {
   
+  console.log(payload)
 
-  return post(
-    "http://localhost:8080/posts",
-    {},
+  return post("http://192.168.0.170:8080/posts",
+    payload,
     {
       headers: {
         Authorization: Cookies.get("_token"),
@@ -287,4 +296,71 @@ function AddPost(payload: any) {
     }
   );
 }
+
+//get post in home
+
+function getPosts() {
+  return get(
+    `http://192.168.0.170:8080/posts?page=1&limit=10`, {
+
+    headers: { Authorization: "Bearer " +Cookies.get("_token") },
+  });
+}
+
+// like the post
+
+function like(id:any) {
+  return patch(`http://192.168.0.170:8080/posts/${id}/like`, {
+    headers: { Authorization: "Bearer " + Cookies.get("_token") },
+  });
+}
+
+//comment on the post 
+function addComment(id: any, comment: any) {
+  
+
+  return patch(`http://192.168.0.170:8080/posts/${id}/comment`, comment, {
+    headers: { Authorization: "Bearer " + Cookies.get("_token") },
+  });
+
+}
+
+//reply on comment
+function replyToComment(id: any ,reply:any) {
+  return patch(`http://192.168.0.170:8080/posts/comments/${id}/reply`, {reply:reply}, {
+    headers: {Authorization : "Bearer " + Cookies.get("_token")}
+  })
+
+}
+//like to comment
+function likeToComment(id: any ,reply:any) {
+  return patch(`http://192.168.0.170:8080/posts/comments/${id}/like`, {
+    headers: {Authorization : "Bearer " + Cookies.get("_token")}
+  })
+
+}
+
+//like to reply
+function likeToReply(id: any, reply: any) {
+  return patch(`http://192.168.0.170:8080/posts/comments/replies/${id}/like`, {
+    headers: { Authorization: "Bearer " + Cookies.get("_token") },
+  });
+}
+
+//get Saved posts
+function getSavedPosts(userId : any) {
+  return get(
+    `http://192.168.0.170:8080/users/${userId}/savedPosts`, {
+
+    headers: { Authorization: "Bearer " +Cookies.get("_token") },
+  });
+}
+
+// save post 
+function savePost(userId: any, postId: any) {
+  return patch(`http://192.168.0.170:8080/users/${userId}/savePost/${postId}`, {
+    headers: { Authorization: "Bearer " + Cookies.get("_token") },
+  });
+}
+
 

@@ -1,0 +1,30 @@
+.mybtn{
+
+   position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  width: 450px;
+  background-color: transparent !important;
+  color: transparent !important;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  height: 10px;
+  display: flex;
+ justify-content: center;
+  
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+}
+.slider {
+
+  // -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory; 
+}
+.slides  .slide {
+  /* CURRENT way. */
+  scroll-snap-align: start;
+}

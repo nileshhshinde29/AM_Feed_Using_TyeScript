@@ -8,14 +8,16 @@
 }
 .card{
      width: 450px  ;
-    height: 630px ;
+    height: auto ;
     // background-color: aquamarine !important;
+    overflow: visible !important;
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2) !important
 }
 .img{
     // box-shadow: 0 0 8px 8px rgb(175, 24, 24) inset;
 }
 .caption{
+    
     margin-left: 20px;
     display: flex;
     align-items: center;
@@ -32,3 +34,21 @@ font-weight: bold !important;
 // Align: Left
 // Vertical align: Top
 }
+.disable{
+  color:gray !important;
+//   background-color: gray;
+}
+.child {
+  flex: 1 0 12%; /* explanation below */
+  margin: 5px;
+  height: 10%vw;
+//   width: 20px;
+  background-color: blue;
+}
+.parent {
+  display: flex;
+  flex-wrap:wrap;
+}
+
+
+ 

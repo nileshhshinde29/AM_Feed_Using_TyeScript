@@ -9,14 +9,14 @@ import PageNotFound from "../../pages/auth/page-not-found/page-not-found";
 import "./AppNavigator.scss";
 import { authenticationService } from "../../utils/auth.service";
 
-// export type AppNavigatorProps = any;
+export type AppNavigatorProps = any;
 type my = {
 
   
 
 }
 
-export const AppNavigator = (props: my) => {
+export const AppNavigator = (props: AppNavigatorProps) => {
 
 
   return (

@@ -7,6 +7,7 @@ const Signup = lazy(() => import("../pages/signup/Signup"))
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/Reset_Password/ResetPassword"));
 const EditProfile = lazy(() => import("../pages/home/EditProfile/EditProfile"));
+const SavePost = lazy(() => import("../pages/SavedPosts/SavedPost"));
 
 
 /*
@@ -18,7 +19,8 @@ export const paths = {
   signup: "/auth/signup",
   forgotPassword: "/auth/forgotpassword",
   resetPassword: "/auth/reset-password",
-  editProfile : "/edit"
+  editProfile: "/edit",
+  savePost: "/savepost"
 };
 
 /*
@@ -48,5 +50,9 @@ export const routes: any[] = [
   {
     path: paths.editProfile,
     component: EditProfile,
+  },
+  {
+    path: paths.savePost,
+    component: SavePost,
   },
 ];

@@ -69,6 +69,7 @@ type my = {
               name="caption"
               autoFocus
             />
+            <DisplayImages/>
           </Grid>
         </Grid>
         <Grid>

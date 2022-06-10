@@ -31,7 +31,7 @@ export default function Login({}) {
   
   const history = useHistory()
   // Initial hooks
-  const [isButtonDisabled, setButtonDisabled] = useState(false);
+  const [isButtonDisabled, setButtonDisabled] = useState();
 
   // const { handleSubmit } = useForm();
 

@@ -21,6 +21,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
+import AddPost from "./AddPost/AddPost"
+import history from "../../routes/history";
 
 export type NavbarProps = {
   /**
@@ -28,10 +30,12 @@ export type NavbarProps = {
    */
   onLogout?: any;
   userInfo: any;
+  
 };
 
 export const Navbar = ({ onLogout }: NavbarProps) => {
-  const userInfo = JSON.parse(localStorage.getItem("currentUser") || "");
+  const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
+  const [openAddPost , setOpenAddPost]=useState(false)
 
   // mui Dropdown *********************************************************************************************
 
@@ -64,6 +68,7 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
         marginBottom: "20px",
       }}
     >
+      <AddPost openAddPost={openAddPost} setOpenAddPost={setOpenAddPost} />
       <Toolbar
         variant="dense"
         sx={{
@@ -84,11 +89,13 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
           <IconButton sx={{ color: "black" }} onClick={() => setStateForIcon("home")}>
             {stateForIcon==="home" ? <HomeIcon/> :<HomeOutlinedIcon/> }
           </IconButton>
-          <IconButton sx={{ color: "black" }} onClick={() => setStateForIcon("add")}>
+          <IconButton sx={{ color: "black" }} onClick={() => {setStateForIcon("add") ; setOpenAddPost(!openAddPost)}}>
             {stateForIcon==="add" ? <AddAPhotoIcon/> :<AddAPhotoOutlinedIcon/>}
           </IconButton>
-          <IconButton sx={{ color: "black" }} onClick={() => setStateForIcon("bookmark")}>
-            {stateForIcon==="bookmark" ?<BookmarkOutlinedIcon/>: <BookmarkBorderOutlinedIcon/> }
+          <IconButton sx={{ color: "black" }} onClick={() => { setStateForIcon("bookmark"); history.push('/savepost') }}>
+            
+            {stateForIcon === "bookmark" ? <BookmarkOutlinedIcon /> : <BookmarkBorderOutlinedIcon />}
+            
           </IconButton>
 
          
@@ -104,7 +111,7 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  <Avatar src={image} sx={{ height: "25px", width: "25px", marginRight: '10px' } } />
+                  <Avatar src={`http://192.168.0.170:8080/${userInfo.image}`} sx={{ height: "25px", width: "25px", marginRight: '10px' } } />
                   {userInfo.firstname} {userInfo.lastname}
                 </Button>
                 
@@ -119,13 +126,14 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
               PaperProps={{
                 elevation: 0,
                 sx: {
+                  borderRadius:"10px",
                   overflow: 'visible',
                   filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                   mt: 1.5,
                   '& .MuiAvatar-root': {
                     width: 32,
                     height: 32,
-                    borderRadius:20,
+                   
                     ml: -0.5,
                     mr: 1,
                   },
@@ -138,13 +146,13 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
                     width: 10,
                     height: 10,
                     bgcolor: 'background.paper',
-                    transform: 'translateY(-50%) translateX(-1100%)  rotate(45deg)',
+                    transform: 'translateY(-50%) translateX(-400%)   rotate(45deg)',
                     zIndex: 0,
                   },
                 },
               }}
               transformOrigin={{ horizontal: 'right', vertical: 'top'   }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
             >
               <MenuItem>
                 <ListItemIcon>
@@ -171,19 +179,7 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
           </React.Fragment>
 
         </Stack>
-        {/* </Grid> */}
-        {/* <Grid item xs={3} lg={3} xl={3}>
-              <Tooltip title="Logout">
-                <Button
-                  variant="text"
-                  style={{ color: "black" }}
-                  onClick={onLogout}
-                >
-                  <Logout />
-                </Button>
-              </Tooltip>
-            </Grid> */}
-        {/* </Grid> */}
+       
       </Toolbar>
     </AppBar>
   );
