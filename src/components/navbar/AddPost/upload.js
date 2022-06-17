@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import uploadImage from '../../../Images/uploadImage.jpg'
 import { Button, Stack } from '@mui/material';
 import { borderRadius, height } from '@mui/system';
+import { WindowSharp } from '@mui/icons-material';
+
 
 function LinearProgressWithLabel(props) {
     return (
@@ -26,6 +28,10 @@ LinearProgressWithLabel.propTypes = {
 export default function LinearWithValueLabel(props) {
     const [uploading, setUploading] = React.useState(true)
     const [progress, setProgress] = React.useState(0);
+    
+
+
+
 
     const lastFunction = () => {
         setUploading(false);
@@ -45,7 +51,12 @@ export default function LinearWithValueLabel(props) {
             clearInterval(timer);
         };
     }, []);
-
+   /*  if (uploading) {
+        setTimeout(() => {
+            window.location.reload();
+        },3000)
+    }
+ */
     return (
         <Box sx={{ width: '100%', display: 'flex', flexDirection: "column", alignItems: "center", justifyContent: 'space-between' }}>
             <Stack><img src={uploadImage} /> </Stack>

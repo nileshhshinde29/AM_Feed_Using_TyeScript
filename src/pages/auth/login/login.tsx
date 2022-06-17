@@ -15,9 +15,10 @@ import { authenticationService } from "../../../utils/auth.service";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { json } from "stream/consumers";
 import {  useHistory } from "react-router-dom";
-import { Card } from "@mui/material";
+import { Card, Stack } from "@mui/material";
 import { GoogleLogin } from "react-google-login";
 import { maxWidth } from "@mui/system";
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
 
 
@@ -60,7 +61,7 @@ export default function Login({}) {
    */
   const doLogin = (data: any, e: any) => {
     // setButtonDisabled(true);
-    console.log("hii");
+    
 
     authenticationService
       .verifyCredentials(data)
@@ -145,7 +146,7 @@ export default function Login({}) {
                 autoComplete="email"
                 autoFocus
                 error={Boolean(errors.email)}
-                helperText={errors.email?.message}
+                helperText={errors.email && <Stack direction={'row'}><WarningRoundedIcon height='0.6rem' width='0.6rem' />{' '} {errors.email?.message}</Stack>}
               />
 
               <TextField
@@ -173,7 +174,7 @@ export default function Login({}) {
                 })}
                 name="password"
                 error={Boolean(errors.password)}
-                helperText={errors.password?.message}
+                helperText={errors.password  && <Stack direction={'row'}><WarningRoundedIcon height='0.6rem' width='0.6rem' />{' '} {errors.password?.message}</Stack>}
               />
               {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -214,7 +215,7 @@ export default function Login({}) {
                       color: "#637381",
                       textDecoration: "none",
                     }}
-                    href="/auth/signup"
+                    href="/auth/forgotpassword"
                     variant="body2"
                   >
                     {" Forgot password ?"}
@@ -235,9 +236,10 @@ export default function Login({}) {
                   {" Don't have an account? "}
                   <Link
                     sx={{ textDecoration: "none" }}
-                    onClick={() => {
-                      return history.push("/auth/forgotpassword");
-                    }}
+                    href='/auth/signup'
+                    // onClick={() => {
+                    //   return history.push("/auth/forgotpassword");
+                    // }}
                     variant="body2"
                   >
                     Sign Up
@@ -272,7 +274,7 @@ export default function Login({}) {
               </div>
               <div style={{ marginLeft: "30%", marginRight: "auto" }}>
                 <GoogleLogin
-                // clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                  clientId="258096711456-f6igfuafn2n9c5s14ch12tos4vag8jmj.apps.googleusercontent.com"
                 // onSuccess={responseGoogle}
                 // isSignedIn={true}
                 />

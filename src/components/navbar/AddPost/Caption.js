@@ -28,11 +28,15 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { authenticationService } from "../../../utils/auth.service";
 import Upload from './upload'
 import Emoji from "../../../pages/home/emoji"
+import { useContext } from 'react';
+import { UserContext } from '../../../App'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 function DisplayImages(props) {
 
-
+	const user = useContext(UserContext)
+	const Post = user.data
+	const page = user.page
 
 
 
@@ -70,6 +74,32 @@ function DisplayImages(props) {
 		setAge(event.target.value)
 	}
 
+
+	const postData2 = {
+		caption: "new Post",
+		comments: [],
+		createdAt: "2022-06-17T06:56:32.205Z",
+		createdBy: {
+			email: "nilesh@angularminds.in",
+			firstname: "Nilesh",
+			image: "image-1655287467056.jpg",
+			lastname: "Shinde",
+			_id: "6281ccbadc7ad759f5be1177",
+		},
+		email: "nilesh@angularminds.in",
+		firstname: "Nilesh",
+		image: "image-1655287467056.jpg",
+		lastname: "Shinde",
+		_id: "6281ccbadc7ad759f5be1177",
+		deleted: false,
+		image: [{ filename: "image-1655448992069.jpg", path: "src/uploads/image-1655448992069.jpg" }, { filename: "image-1655448992117.jpg", path: "src/uploads/image-1655448992117.jpg" }],
+
+		likes: [],
+		location: "Somewere on earth",
+		updatedAt: "2022-06-17T06:56:32.205Z",
+		_id: "62ac25a05a792df1fae3b7bb",
+	}
+
 	const AddPostFun = () => {
 
 		const formData = new FormData()
@@ -84,12 +114,17 @@ function DisplayImages(props) {
 
 		authenticationService.AddPost(formData)
 			.then(
-				() => {
+				(res) => {
 					setPostData({ images: [], caption: "", location: "" })
-					// setPostData({})
+					user.setData(prv => ([res, ...prv]))
 					setUpload(true)
 				}
 			).catch(e => console.log(e))
+		
+
+
+		
+
 	}
 
 	//*****************Emoji*************** */
@@ -103,6 +138,8 @@ function DisplayImages(props) {
 		setAnchorEl(null);
 	};
 
+
+	
 
 
 	return (
@@ -356,6 +393,7 @@ const Locations = [
 	{ label: 'IsKon temple, Pune', },
 	{ label: 'Rajiv Gandhi Reserve Forest, Pune ', },
 	{ label: 'Sinhagad fort, pune', },
+	{ label: 'Varanasi' },
 
 
 

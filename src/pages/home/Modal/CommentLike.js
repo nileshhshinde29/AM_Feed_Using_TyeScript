@@ -10,7 +10,8 @@ function CommentLike(props) {
   return (
     <>
      {  like ? (
-      <FavoriteIcon
+        <FavoriteIcon
+
         sx={{
           height: "15px",
           width: "15px",
@@ -20,7 +21,9 @@ function CommentLike(props) {
         />
         
       ) : (
-      <FavoriteBorderOutlined
+          <FavoriteBorderOutlined
+            className="likeAnimation"
+
         sx={{
           height: "15px",
           width: "15px",

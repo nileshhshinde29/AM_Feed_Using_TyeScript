@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import { Button, FormControl, IconButton, InputLabel, Link, OutlinedInput, Typography } from "@mui/material";
+import { Button, FormControl, IconButton, InputLabel, Link, OutlinedInput, Stack, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { padding } from "@mui/system";
 import { authenticationService } from "../../utils/auth.service";
@@ -13,6 +13,10 @@ import { useState } from "react";
 import likesSmaily from "../../Images/likesSmaily.jpeg";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import InputAdornment from "@mui/material/InputAdornment";
+import { toast } from 'react-toastify';
+import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
+
+
 import "../../App.css";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -69,6 +73,8 @@ export default function FullWidthGrid() {
 
   const sendVerificationMail = (token: any) => {
     authenticationService.sendVerification(token);
+    toast('varification mail sent, check your mail & verify to continue')
+    
   };
 
   // signup function triger on submmit button
@@ -83,10 +89,12 @@ export default function FullWidthGrid() {
         setError("email", { type: "custom", message: err.message });
       });
   };
-  const handleChange =
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+
+  // const handleChange =
+  //   (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  //     setValues({ ...values, [prop]: event.target.value });
+  //     setValue('password', event.target.value)
+  //   };
 
   const handleClickShowPassword = () => {
     setValues({
@@ -153,7 +161,8 @@ export default function FullWidthGrid() {
               name="firstname"
               autoFocus
               error={Boolean(errors.firstname)}
-              helperText={errors.firstname?.message}
+              helperText={errors.firstname && <Stack direction={'row'}><WarningRoundedIcon height='0.6rem' width='0.6rem' />{' '} {errors.firstname?.message}</Stack>}
+
             />
           </Grid>
           <Grid item xs={12} md={6} lg={6} xl={6}>
@@ -172,7 +181,8 @@ export default function FullWidthGrid() {
               name="lastname"
               autoFocus
               error={Boolean(errors.lastname)}
-              helperText={errors.lastname?.message}
+              helperText={errors.lastname && <Stack direction={'row'}><WarningRoundedIcon height='0.6rem' width='0.6rem' />{' '} {errors.lastname?.message}</Stack>}
+
             />
           </Grid>
           <Grid item xs={12} md={12}>
@@ -192,7 +202,8 @@ export default function FullWidthGrid() {
               autoComplete="email"
               autoFocus
               error={Boolean(errors.email)}
-              helperText={errors.email?.message}
+              helperText={errors.email && <Stack direction={'row'}><WarningRoundedIcon height='0.6rem' width='0.6rem' /> {' '}{errors.email?.message}</Stack>}
+
             />
           </Grid>
           <Grid item xs={12} md={12}>
@@ -234,8 +245,18 @@ export default function FullWidthGrid() {
               <OutlinedInput
                 id="outlined-adornment-password"
                 type={values.showPassword ? "text" : "password"}
-                value={values.password}
-                onChange={handleChange("password")}
+                // value={values.password}
+                // onChange={handleChange("password")}
+                {...register("password", {
+                  required: "please enter your password",
+                  pattern: {
+                    value:
+                      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+                    message: "invalid password",
+                  },
+                })}
+                name="password"
+                error={Boolean(errors.password)}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -249,7 +270,10 @@ export default function FullWidthGrid() {
                   </InputAdornment>
                 }
                 label="Password"
+
+                
               />
+              <span style={{ marginLeft: '15px', fontSize: '12px', color: 'red' }}>{errors.password && <Stack direction={'row'}><WarningRoundedIcon height='0.6rem' width='0.6rem' />{ ' '} {errors.password?.message}</Stack>}</span>
             </FormControl>
           </Grid>
           <Grid item xs={12} md={12}>
@@ -274,7 +298,8 @@ export default function FullWidthGrid() {
             xs
           >
             {"Already having an account? "}
-            <Link sx={{ textDecoration: "none" }} variant="body2">
+            <Link sx={{ textDecoration: "none" }} href='/auth/login'  variant="body2">
+              
               Sign in
             </Link>
           </Grid>

@@ -2,13 +2,13 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import { Avatar, CardHeader, Divider, Grid, IconButton, Stack, TextField, Typography } from "@mui/material";
 import "./Modal.scss";
-import { Bookmark, FavoriteBorderOutlined, KeyboardArrowLeft, KeyboardArrowRight, PropaneRounded } from "@mui/icons-material";
+import { KeyboardArrowLeft, KeyboardArrowRight, PropaneRounded } from "@mui/icons-material";
 //
 import SentimentSatisfiedRoundedIcon from "@mui/icons-material/SentimentSatisfiedRounded";
 import FavoriteBorderRoundedIcon from "@mui/icons-material/FavoriteBorderRounded";
 import { useTheme } from "@mui/material/styles";
 import MobileStepper from "@mui/material/MobileStepper";
-import Paper from "@mui/material/Paper";
+// import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import SwipeableViews from "react-swipeable-views";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -22,7 +22,8 @@ import Moment from "react-moment";
 import { authenticationService } from "../../../utils/auth.service";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import Emoji from "../emoji"
+import Emoji from "../emoji";
+import DisplayLikedPeoples from './DisplayLikedPeoples'
 
 
 // import CommentsModal from "../home/Modal/CommentsModal";
@@ -53,14 +54,19 @@ export default function BasicModal(props) {
 
   const [images, setImages] = React.useState(
     props?.data?.image?.map(
-      (imgs: any, i: any) => `http://192.168.0.170:8080/${imgs.filename}`
+      (imgs: any , i: any) => `http://192.168.0.170:8080/${imgs.filename}`
     ) || []
   );
   const [data, setdata] = React.useState(props?.comments);
+  
+  React.useEffect(() => {
 
+    setdata(props?.comments)
+
+  }, [props?.comments])
   const [likess, setLikes] = React.useState(props.likess);
-  const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
-  const[save , setSave]= React.useState()
+  // const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
+  // const[save , setSave]= React.useState()
   
 
 
@@ -107,7 +113,6 @@ export default function BasicModal(props) {
       .then((res) => { 
 
         let newData = data.map((items) => items._id === replyData.commentId ? { ...items , replies: [...items.replies, res] } : items)
-        console.log(newData)
               
         props.setComments(newData);
         setdata(newData);
@@ -124,11 +129,10 @@ export default function BasicModal(props) {
 
     authenticationService
       .likeToComment(commentId)
-      .then((res) => {
-        console.log(res);
+      .then(async (res) => {
 
 
-        let newData = data.map((items) => items._id === res._id ? res : items)
+        let newData = await data.map((items) => items._id === res._id ? res : items)
 
         setdata(newData)
         props.setComments(newData);
@@ -215,7 +219,7 @@ export default function BasicModal(props) {
                           //   src={step}
                           //   alt={step.label}
                           // />
-                          <img src={step} height="500px" width="450px"  />
+                          <img src={step} height="500px" width="450px" />
                         ) : null}
                       </div>
                     ))}
@@ -266,8 +270,8 @@ export default function BasicModal(props) {
                 </Box>
               </>
             </Grid>
-            <Grid container className="center" item xs={5.2}>
-              <Grid xs={12} minHeight="100px" item sx={{ width: "100%" }}>
+            <Grid container className="center" item xs={5.2} >
+              <Grid xs={12} minHeight="100px" item sx={{ width: "100%" }} >
                 <CardHeader
                   sx={{ height: "30px" }}
                   avatar={
@@ -351,21 +355,15 @@ export default function BasicModal(props) {
                       )}
                     </IconButton>
                   </Box>
-                  {console.log(props.savePost)}
                   <IconButton className="clickAnimation" sx={{ color: "black" }} onClick={() => props.saveThisPost()}>
                     {props.savePost ? <BookmarkIcon /> : <BookmarkBorderOutlinedIcon />}
                   </IconButton>
                 </Stack>
                 <Box className="caption2">
-                  <Typography
-                    variant="body2"
-                    fontSize={"10px"}
-                    className="caption1"
-                    color="text.primary"
-                    sx={{ margin: "5px 0 0 10px" }}
-                  >
-                    {(props.likesLength > 0 || props.likess) && props.likesLength + " " + "likes"}
-                  </Typography>
+                 
+                  {(props.likesLength > 0 || props.likess) && < DisplayLikedPeoples likesArray={props.likesArray} length={props.likesLength} />}
+                  
+                  
                 </Box>
                 <Typography
                   variant="body1"
@@ -395,6 +393,7 @@ export default function BasicModal(props) {
                       
                     >
                       <SentimentSatisfiedRoundedIcon />
+
                     </IconButton>
                     <Emoji prvValue={replyData.reply} type={'reply'} setValue={setReplyData} anchorEl={anchorEl} handleClose={handleClose} open1={open1} />
                     <TextField
@@ -428,20 +427,21 @@ export default function BasicModal(props) {
                         }
                         onClick={() => replyOnComment()}
                       >
-                        reply
+                        Post  {/* reply */}
                       </Button>
                     </IconButton>
                   </Box>
                 ) : (
                   <Box
                     display={"flex"}
-                    alignItems={"center"}
+                      alignItems={"center"}
+                    
                     justifyContent={"space-between"}
-                    sx={{ margin: "5px 20px 0 10px" }}
+                    sx={{ margin: "0px 20px 0 10px" }}
                   >
                     <IconButton
                       className="clickAnimation"
-                        sx={{ color: "black" }}
+                        sx={{ color: "black" }} 
                         onClick={handleClick}
                         size="small"
                         // sx={{ ml: 2 }}

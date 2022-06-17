@@ -52,7 +52,7 @@ function Comments(props) {
   return (
     <>
       {[...comments].reverse().map((item, i) => (
-        <>
+        <Box >
           {" "}
 
           <Grid
@@ -151,12 +151,10 @@ function Comments(props) {
               item
               xs={1}
             >
-              <IconButton>
-                {
+              {/* <IconButton> */}
 
                   <CommentLike likeComment={props.likeComment} id={item._id} isLike={item?.likes?.map((itm) => itm._id).includes(userInfo?._id)} />
-                }
-              </IconButton>
+              {/* </IconButton> */}
             </Grid>
           </Grid>
           <Stack>
@@ -169,7 +167,7 @@ function Comments(props) {
               alignItems="center"
             >
               <Stack onClick={() => setReply(prv => prv === item._id ? "" : item._id)}>
-                {item?.replies?.length > 0 && `----- view ${item?.replies?.length} reply`}
+                {item?.replies?.length > 0 && `----- ${openReply==item._id ? 'hide': "view"} ${item?.replies?.length} reply`}
               </Stack>
             </Stack>
             <Stack
@@ -188,7 +186,7 @@ function Comments(props) {
                   [...item?.replies].reverse().map((it, i) => (
                     <Grid
                       container
-                      xs={12}
+                      // xs={12}
                       spacing={2}
                       fontSize="10px"
                       color="gray"
@@ -214,7 +212,7 @@ function Comments(props) {
                       <Grid item xs={4}>
                         <Grid>{it?.reply}</Grid>
                       </Grid>
-                      <Grid item xs={2}>
+                      <Grid item xs={1  }>
                         <Grid>
                           {/* {console.log(it?.likes?.map(it2=>it2._id).includes(userInfo._id))} */}
                           {/* <FavoriteBorderOutlined
@@ -233,7 +231,7 @@ function Comments(props) {
               </Grid>
             </Stack>
           </Stack>
-        </>
+        </Box>
       ))}
     </>
   );

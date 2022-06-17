@@ -31,7 +31,6 @@ function ResetPassword() {
     const { search } = useLocation()
     const token = search?.split("=")[1];
 
-    console.log(token.length)
 
   
   //* reset password function  
@@ -61,12 +60,12 @@ function ResetPassword() {
         }}
       >
         <Grid container spacing={4}>
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12} md={12} sx={{display:'flex' , alignItems:'center',justifyContent:'center'}}>
             <Typography
               fontSize={25}
               sx={{ color: "#2e2e2d", fontFamily: "sans-serif" }}
             >
-              Reset Password
+              Set your new password
             </Typography>
           </Grid>
           <Grid item xs={12} md={12} >
@@ -114,13 +113,11 @@ function ResetPassword() {
             />
           </Grid>
 
-          <Grid item container >
-            <Grid item xs={12} md={6}>
-              <Button onClick={handleSubmit(Reset)}>Submit</Button>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Button href="/auth/login">go to login page</Button>
-            </Grid>
+          <Grid item  xs={12} md={12}>
+              <Button fullWidth variant="contained" onClick={handleSubmit(Reset)}>Reset Password</Button>
+          </Grid>
+          <Grid item xs={12} md={12}>
+              <Button fullWidth variant="outlined" type="button" href='/auth/login'>Back</Button>
           </Grid>
         </Grid>
       </Box>

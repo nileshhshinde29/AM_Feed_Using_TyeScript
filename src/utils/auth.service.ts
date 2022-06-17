@@ -61,6 +61,10 @@ export const authenticationService = {
   like,
   savePost,
   getSavedPosts,
+  uploadProfilePic,
+  uploadProfileInfo,
+  verifySentMail,
+  ChangePassword,
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() {
     return currentUserSubject.value;
@@ -116,13 +120,23 @@ function forgotPassword(payload: any) {
  * Verify OTP method
  */
 function requestPasswordReset(payload: any) {
-  console.log(payload.obj)
   return post(
     `http://192.168.0.170:8080/auth/reset-password?token=${payload.token}`,payload.obj
   ).then((response: any) => {
     return response;
   });
 }
+
+// change password 
+
+function ChangePassword(payload: any) {
+  
+  console.log(payload)
+  return patch(`http://192.168.0.170:8080/users/changePassword`,payload, {
+    headers: { Authorization: "Bearer " + Cookies.get("_token") },
+  });
+}
+
 
 /*
  * Unsubscribe all subjects to avoid memory leak
@@ -241,13 +255,16 @@ function isUserAndTokenAvailable() {
  * Fetch current user
  */
 function loadCurrentUser() {
-  get(`/api/auth/self`).then((response: any) => {
+ return  get(`http://192.168.0.170:8080/auth/self`)
+    
+    // .then((response: any) => {
 
-    localStorage.setItem("currentUser", JSON.stringify(response));
-    currentUserSubject.next(response);
-    currentOrganizationSubject.next(response._org[0]);
+    // localStorage.setItem("currentUser", JSON.stringify(response));
+    // console.log(response)
+    // currentUserSubject.next(response);
+    // currentOrganizationSubject.next(response._org[0]);
 
-  });
+  // });
 }
 
 /*
@@ -281,6 +298,15 @@ function sendVerification(payload: any) {
   });
 }
 
+function verifySentMail(payload: any) {
+  
+ return post(
+    `http://192.168.0.170:8080/auth/verify-email?token=${payload}`,{}
+  ).then((response: any) => {
+    return response;
+  });
+}
+
 //* Add post 
 
 function AddPost(payload: any) {
@@ -299,9 +325,9 @@ function AddPost(payload: any) {
 
 //get post in home
 
-function getPosts() {
+function getPosts(page:any) {
   return get(
-    `http://192.168.0.170:8080/posts?page=1&limit=10`, {
+    `http://192.168.0.170:8080/posts?page=${page}&limit=2`, {
 
     headers: { Authorization: "Bearer " +Cookies.get("_token") },
   });
@@ -363,4 +389,17 @@ function savePost(userId: any, postId: any) {
   });
 }
 
+//upload profile pic
+function uploadProfilePic(userId: any, pic: any) {
+  return patch(`http://192.168.0.170:8080/users/${userId}/profile_pic`, pic, {
+    headers: { Authorization: "Bearer " + Cookies.get("_token") },
+  });
+}
+
+// update Profile Information
+function uploadProfileInfo(userId: any, data:any) {
+  return patch(`http://192.168.0.170:8080/users/${userId}/`, data, {
+    headers: { Authorization: "Bearer " + Cookies.get("_token") },
+  });
+}
 

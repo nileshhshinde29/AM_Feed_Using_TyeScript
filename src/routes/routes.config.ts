@@ -6,8 +6,12 @@ const Login = lazy(() => import("../pages/auth/login/login"));
 const Signup = lazy(() => import("../pages/signup/Signup"))
 const ForgotPassword = lazy(() => import("../pages/ForgotPassword/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/Reset_Password/ResetPassword"));
-const EditProfile = lazy(() => import("../pages/home/EditProfile/EditProfile"));
+
+// const EditProfile = lazy(() => import("../pages/home/EditProfile/EditProfile"));
+const VerifyMail = lazy(() => import("../pages/auth/Verify/verifyEmail"));
+
 const SavePost = lazy(() => import("../pages/SavedPosts/SavedPost"));
+const EditProfile= lazy(()=> import('../components/navbar/EditProfile'))
 
 
 /*
@@ -20,7 +24,8 @@ export const paths = {
   forgotPassword: "/auth/forgotpassword",
   resetPassword: "/auth/reset-password",
   editProfile: "/edit",
-  savePost: "/savepost"
+  savePost: "/savepost",
+  verifyMail:"/auth/verify-email"
 };
 
 /*
@@ -54,5 +59,9 @@ export const routes: any[] = [
   {
     path: paths.savePost,
     component: SavePost,
+  },
+  {
+    path: paths.verifyMail,
+    component: VerifyMail,
   },
 ];

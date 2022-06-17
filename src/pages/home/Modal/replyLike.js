@@ -3,17 +3,21 @@ import {
   FavoriteBorderOutlined,
   FavoriteBorderRounded,
 } from "@mui/icons-material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
  
 function ReplyLike(props) {
    
 
-    const [like, setLike] = useState(props.isLike);
+  const [like, setLike] = useState(props.isLike);
+  useEffect(() => {
+    setLike(props.isLike)
+  }, [props.isLike])
     
   return (
     <>
       {like ? (
         <FavoriteIcon
+         className="likeAnimation"
           sx={{
             height: "15px",
             width: "15px",
@@ -25,7 +29,10 @@ function ReplyLike(props) {
           }}
         />
       ) : (
-        <FavoriteBorderOutlined
+          <FavoriteBorderOutlined
+            
+            className="likeAnimation"
+
           sx={{
             height: "15px",
             width: "15px",

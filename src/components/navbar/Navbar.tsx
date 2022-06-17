@@ -23,6 +23,9 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import AddPost from "./AddPost/AddPost"
 import history from "../../routes/history";
+import EditProfile from '../navbar/EditProfile'
+import { authenticationService } from "../../utils/auth.service";
+import ChangePassword from './ChangePassword'
 
 export type NavbarProps = {
   /**
@@ -33,9 +36,15 @@ export type NavbarProps = {
   
 };
 
+ 
+
+
 export const Navbar = ({ onLogout }: NavbarProps) => {
   const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
-  const [openAddPost , setOpenAddPost]=useState(false)
+  const [openAddPost, setOpenAddPost] = useState(false)
+  const [openModal, setModal] = useState({
+    edit: false,
+  changePassword:false})
 
   // mui Dropdown *********************************************************************************************
 
@@ -50,6 +59,32 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
   //********************************************************************************************************** */
 
   const [stateForIcon, setStateForIcon] = useState("")
+
+
+  const [initialValues, setInitialValue] = React.useState({
+    name: '',
+    email: '',
+    bio: '',
+    gender: '',
+    DOB: null,
+    mobile: '',
+    image:''
+  })
+
+  const selfFetching = () => {
+    authenticationService.loadCurrentUser()
+      .then((res: any) =>
+      {
+        localStorage.setItem("currentUser", JSON.stringify(res));
+        setInitialValue({ ...initialValues, image: res.image, name: res.firstname + " " + res.lastname, email: res.email, DOB: res.DOB, bio: res.bio, gender: res.gender, mobile: res.mobile })
+}      ).catch(e => console.log(e))
+
+  }
+
+  React.useEffect(() => {
+    selfFetching()
+    
+  },[])
 
   return (
     <AppBar
@@ -86,13 +121,13 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
         </Stack>
         
         <Stack flexDirection={"row"} alignItems="center">
-          <IconButton sx={{ color: "black" }} onClick={() => setStateForIcon("home")}>
+          <IconButton sx={{ color: "black" }} href='/home' onClick={() => setStateForIcon("home")}>
             {stateForIcon==="home" ? <HomeIcon/> :<HomeOutlinedIcon/> }
           </IconButton>
           <IconButton sx={{ color: "black" }} onClick={() => {setStateForIcon("add") ; setOpenAddPost(!openAddPost)}}>
             {stateForIcon==="add" ? <AddAPhotoIcon/> :<AddAPhotoOutlinedIcon/>}
           </IconButton>
-          <IconButton sx={{ color: "black" }} onClick={() => { setStateForIcon("bookmark"); history.push('/savepost') }}>
+          <IconButton sx={{ color: "black" }} href='/savepost'  onClick={() => { setStateForIcon("bookmark"); /* history.push('/savepost')  */}}>
             
             {stateForIcon === "bookmark" ? <BookmarkOutlinedIcon /> : <BookmarkBorderOutlinedIcon />}
             
@@ -111,7 +146,7 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  <Avatar src={`http://192.168.0.170:8080/${userInfo.image}`} sx={{ height: "25px", width: "25px", marginRight: '10px' } } />
+                  <Avatar src={`http://192.168.0.170:8080/${initialValues.image}`} sx={{ height: "25px", width: "25px", marginRight: '10px' } } />
                   {userInfo.firstname} {userInfo.lastname}
                 </Button>
                 
@@ -154,13 +189,14 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
               transformOrigin={{ horizontal: 'right', vertical: 'top'   }}
               anchorOrigin={{ horizontal: 'center', vertical: 'bottom' }}
             >
-              <MenuItem>
+             
+              <MenuItem onClick={()=> setModal({...openModal ,edit:!openModal.edit})} >
                 <ListItemIcon>
                   <ManageAccountsOutlined /> 
-                </ListItemIcon>
+                </ListItemIcon >
                 Edit profile
-              </MenuItem>
-              <MenuItem>
+              </MenuItem >
+              <MenuItem onClick={() => setModal({ changePassword: !openModal.changePassword, edit: false})}>
                 <ListItemIcon>
                   <LockResetOutlined />
                 </ListItemIcon>
@@ -177,7 +213,8 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
               </MenuItem>
             </Menu>
           </React.Fragment>
-
+          <EditProfile open={openModal.edit} initialValues={initialValues} selfFetching={selfFetching} closed={setModal} handleClose={handleClose} />
+          <ChangePassword open={openModal.changePassword} setModal={setModal} />
         </Stack>
        
       </Toolbar>

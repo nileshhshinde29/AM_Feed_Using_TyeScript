@@ -62,13 +62,14 @@ const style = {
     width: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
+    borderRadius:'5px',
     boxShadow: 24,
     p: 4,
 };
 
 
 interface ExpandMoreProps extends IconButtonProps {
-    expand: boolean;
+    expand: boolean; 
     MobileStepper: JSX.Element;
 }
 
@@ -81,11 +82,12 @@ function Cards(props: any) {
     const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
 
     const [images, setImages] = useState(props?.data?.image?.map((imgs: any, i: any) => `http://192.168.0.170:8080/${imgs.filename}`) || [])
-    const [likess, setLikes] = useState(props.data.likes.map((item: any) => item._id).includes(userInfo._id) ? true : false)
+    const [likess, setLikes] = useState(props.data?.likes?.map((item: any) => item._id).includes(userInfo._id) ? true : false)
     const [comments, setComments] = useState(props?.data?.comments || [])
     const [savePost, setSavePost] = useState(false)
     const [savedPost, setSavedPost] = useState([])
-    const [likesLength, setLikeLength] = useState(props.data.likes.length)
+    const [likesLength, setLikeLength] = useState(props.data.likes?.length)
+    const [likesArray, setLikesArray] = useState(props.data.likes)
 
 
 
@@ -108,7 +110,7 @@ function Cards(props: any) {
     };
     //**********************************************likes */
     function likePost() {
-        authenticationService.like(props.data._id).then((res: any) => { "" }).catch(e => console.log(e))
+        authenticationService.like(props.data._id).then((res: any) => setLikesArray(res.likes)).catch(e => console.log(e))
         setLikes(!likess)
     }
 
@@ -120,7 +122,7 @@ function Cards(props: any) {
 
 
 
-
+// console.log(comments)
     // ****************************************Comments
     const { register, handleSubmit, getValues, formState: { errors }, watch, setValue } = useForm({ defaultValues: { comment: "" } })
 
@@ -142,7 +144,7 @@ function Cards(props: any) {
     }, [])
    
     useEffect(() => {
-        if (savedPost.map(item => item?._id).includes(props.data?._id)) {
+        if (savedPost.map((item:any) => item?._id).includes(props.data?._id)) {
             setSavePost(true)
         }
         else {
@@ -150,7 +152,6 @@ function Cards(props: any) {
         }
     },[savedPost])
 
-    console.log(savedPost)
 
 
 
@@ -176,27 +177,29 @@ function Cards(props: any) {
     });
      
     //*****************Emoji*************** */
-    
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open1 = Boolean(anchorEl);
-    const handleClick = (event) => {
+    const handleClick = (event:any) => {
         setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+
      
    
 
 
     function getPost() {
 
-        authenticationService.getSavedPosts(userInfo._id).then(res => setSavedPost(res.savedPosts)).catch(e => console.log(e))
+        authenticationService.getSavedPosts(userInfo._id).then((res: any) => setSavedPost(res.savedPosts)).catch(e => console.log(e))
     }
 
     async function  saveThisPost() {
 
-        await authenticationService.savePost(userInfo._id, props?.data?._id).then(res => setSavedPost(res)).catch(e => console.log(e))
+        await authenticationService.savePost(userInfo._id, props?.data?._id).then((res: any) => setSavedPost(res)).catch(e => console.log(e))
     }
 
 
@@ -205,15 +208,15 @@ function Cards(props: any) {
 
     return (
         <div> <Container className="container">
-            <Card className="card">
+            <Card className="card" >
                 <CardHeader
                     avatar={
-                        <Avatar sx={{ bgcolor: red[500] }} src={`http://192.168.0.170:8080/${props.data.createdBy.image}`} aria-label="recipe">
+                        <Avatar sx={{ bgcolor: red[500] }} src={`http://192.168.0.170:8080/${props.data?.createdBy?.image}`} aria-label="recipe">
                             R
                         </Avatar>
                     }
                     title={
-                        <Typography fontFamily={" sans-serif"}>{props.data.createdBy.firstname}{" "}{props.data.createdBy.lastname}</Typography>
+                        <Typography fontFamily={" sans-serif"}>{props.data.createdBy?.firstname}{" "}{props.data?.createdBy?.lastname}</Typography>
                     }
                     subheader={
                         <Typography fontSize={"11px"} fontFamily={" sans-serif"}>
@@ -336,10 +339,10 @@ function Cards(props: any) {
                         className="caption1"
                         color="text.primary"
                     >
-                        {props.data.createdBy.firstname}{" "}{props.data.createdBy.lastname}
+                        {props.data.createdBy?.firstname}{" "}{props.data.createdBy?.lastname}
                     </Typography>
                     <Typography variant="body2" fontSize={"12px"}>
-                        {props.data.caption}
+                        {props.data?.caption}
                     </Typography>
                 </Box >
 
@@ -353,8 +356,21 @@ function Cards(props: any) {
                 >
                     {comments?.length > 0 && (comments?.length > 1 ? `View all ${comments?.length} Comments` : `View  ${comments?.length} Comment`)}
                 </Typography>
-                <CommentsModal savePost={savePost} saveThisPost={saveThisPost} likesLength={likesLength} setLikeLength={setLikeLength} open={open} setOpen={setOpen} comments={comments} data={props.data} likess={likess} setLikes={likePost} setComment={setComment} setComments={setComments} />
-                {console.log()}
+                <CommentsModal
+                    savePost={savePost}
+                    saveThisPost={saveThisPost}
+                    likesLength={likesLength}
+                    setLikeLength={setLikeLength}
+                    open={open} setOpen={setOpen}
+                    comments={comments}
+                    data={props.data}
+                    likess={likess}
+                    setLikes={likePost}
+                    setComment={setComment}
+                    setComments={setComments}
+                    likesArray={likesArray}
+                />
+                
                 <Typography
                     variant="body1"
                     fontSize={"10px"}
@@ -370,22 +386,22 @@ function Cards(props: any) {
                     justifyContent={"space-between"}
                     sx={{ margin: "5px 20px 0 10px" }}
                 >
-                    <IconButton className="clickAnimation" sx={{ color: "black" }}
+                    <IconButton
+                        className="clickAnimation"
+                        sx={{ color: "black" }}
                         onClick={handleClick}
                         size="small"
                         // sx={{ ml: 2 }}
                         aria-controls={open1 ? 'account-menu' : undefined}
                         aria-haspopup="true"
-                        aria-expanded={open1 ? 'true' : undefined}>
+                        aria-expanded={open1 ? 'true' : undefined}
+                    >
                         <SentimentSatisfiedRoundedIcon />
-                        
                     </IconButton>
-
                     <Emoji prvValue={watch("comment")} type={"comment"} setValue={setValue} anchorEl={anchorEl} handleClose={handleClose} open1={open1} />
 
-
                     <TextField
-                        sx={{ fontSize: "14px" }}
+                        sx={{ fontSize: "14px"}}
                         variant="standard"
                         {...register("comment", { required: "Comment is required"})}
                         fullWidth

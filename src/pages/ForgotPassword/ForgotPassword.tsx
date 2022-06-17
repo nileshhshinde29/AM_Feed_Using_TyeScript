@@ -43,18 +43,21 @@ function ForgotPassword() {
       <Box
         sx={{
           flexGrow: 1,
-          margin: "100px 30% 0 30%",
+          margin: "100px 35% 0 35%",
           border: "4px solid #d9d9d9",
           padding: "30px",
           borderRadius: "5px",
         }}
       >
-        <Grid container spacing={4}>
+        <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
             <Typography fontSize={25} sx={{color:"#2e2e2d", fontFamily:"sans-serif"}}>Forgot Password</Typography>
           </Grid>
-          <Grid container item xs={12} md={12} spacing={4}>
-            <Grid item xs={12} md={8}>
+          <Grid item xs={12} md={12}>
+            <Typography fontSize={25} sx={{ color: "gray", fontFamily: "sans-serif",fontSize:'12px' }}>Please enter email address associated with your account, and will email you a link to reset password</Typography>
+          </Grid>
+         
+            <Grid item xs={12} md={12}>
               <TextField
                 required
                 fullWidth
@@ -73,27 +76,33 @@ function ForgotPassword() {
                 autoFocus
                 error={Boolean(errors.email)}
                 helperText={errors.email?.message}
-              />
+            />
+            
             </Grid>
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={12}>
               <Button
-                variant="contained"
+              variant="contained"
+              fullWidth
                 sx={{ height: "55px" }}
                 onClick={handleSubmit(sentMail)}
               >
                 Send
               </Button>
-            </Grid>
+          </Grid>
+          <Grid item xs={12} md={12}>
+            <Button
+              variant="text"
+              fullWidth
+              type="button"
+              sx={{ height: "55px" }}
+              href='/auth/login'
+              // onClick={handleSubmit(sentMail)}
+            >
+              Back
+            </Button>
           </Grid>
           
-          <Grid item container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <Button href="/auth/signup">go to signup page</Button>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Button href="/auth/login">go to login page</Button>
-            </Grid>
-          </Grid>
+          
         </Grid>
       </Box>
     </>
