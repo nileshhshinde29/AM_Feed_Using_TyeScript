@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Avatar, Divider, Stack } from '@mui/material';
+import { baseURL } from '../../../utils/constants/urls'
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -19,7 +20,7 @@ const style = {
     // p: 4,
 };
 
-export default function BasicModal(props:any) {
+export default function BasicModal(props: any) {
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -53,7 +54,7 @@ export default function BasicModal(props:any) {
                                             <Stack>
                                                 <Avatar
                                                     sx={{ height: "30px", width: "30px" }}
-                                                    src={`http://192.168.0.170:8080/${item?.image}`}
+                                                    src={`http://${baseURL}/${item?.image}`}
                                                     aria-label="recipe"
                                                 ></Avatar>
                                             </Stack>

@@ -30,6 +30,7 @@ import Upload from './upload'
 import Emoji from "../../../pages/home/emoji"
 import { useContext } from 'react';
 import { UserContext } from '../../../App'
+import { baseURL } from "../../../utils/constants/urls";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 function DisplayImages(props) {
@@ -75,31 +76,7 @@ function DisplayImages(props) {
 	}
 
 
-	const postData2 = {
-		caption: "new Post",
-		comments: [],
-		createdAt: "2022-06-17T06:56:32.205Z",
-		createdBy: {
-			email: "nilesh@angularminds.in",
-			firstname: "Nilesh",
-			image: "image-1655287467056.jpg",
-			lastname: "Shinde",
-			_id: "6281ccbadc7ad759f5be1177",
-		},
-		email: "nilesh@angularminds.in",
-		firstname: "Nilesh",
-		image: "image-1655287467056.jpg",
-		lastname: "Shinde",
-		_id: "6281ccbadc7ad759f5be1177",
-		deleted: false,
-		image: [{ filename: "image-1655448992069.jpg", path: "src/uploads/image-1655448992069.jpg" }, { filename: "image-1655448992117.jpg", path: "src/uploads/image-1655448992117.jpg" }],
-
-		likes: [],
-		location: "Somewere on earth",
-		updatedAt: "2022-06-17T06:56:32.205Z",
-		_id: "62ac25a05a792df1fae3b7bb",
-	}
-
+	
 	const AddPostFun = () => {
 
 		const formData = new FormData()
@@ -146,26 +123,30 @@ function DisplayImages(props) {
 		<>
 			<Box
 				className="container2"
-				sx={{ width: "800px", backgroundColor: "white" }}
+				sx={{ maxWidth: "800px", maxHeight:'500px' ,backgroundColor: "white" ,overflowY:"scroll" }}
 			>
 				{
-					upload ? <Stack height='500px'> <Upload discard={props.DiscardFunction} /> </Stack> :
+					upload ? <Grid spacing={2} xs={12} container > <Upload discard={props.DiscardFunction} /> </Grid> :
 						<>
-							<Stack
-								display={"flex"}
-								alignItems={"center"}
-								justifyContent={"space-between"}
-								flexDirection={"row"}
-							>
-								<Stack>
-									<Button onClick={() => props.setNext((prv) => !prv)}>Back</Button>
+							
+							<Grid container item sx={12}>
+								<Grid item xs={12}>
+								<Stack
+									display={"flex"}
+									alignItems={"center"}
+									justifyContent={"space-between"}
+									flexDirection={"row"}
+
+								>
+									<Stack>
+										<Button onClick={() => props.setNext((prv) => !prv)}>Back</Button>
+									</Stack>
+									<Stack>
+										<Button onClick={() => AddPostFun()}>Upload</Button>
+									</Stack>
 								</Stack>
-								<Stack>
-									<Button onClick={() => AddPostFun()}>Upload</Button>
-								</Stack>
-							</Stack>
-							<Grid container spacing={2} sx={12}>
-								<Grid item xs={8}>
+							</Grid>
+								<Grid item xs={12} sm={8}> 
 									<AutoPlaySwipeableViews
 										axis={theme.direction === "rtl" ? "x-reverse" : "x"}
 										index={activeStep}
@@ -182,10 +163,11 @@ function DisplayImages(props) {
 														component="img"
 														sx={{
 															// marginTop: "30px",
-															height: 470,
+															height:470,
 															display: "block",
 															// maxWidth: "500px",
 															// overflow: "hidden",
+															overflowWrap:'wrap',
 															width: "100%",
 														}}
 														src={URL.createObjectURL(step)}
@@ -239,11 +221,11 @@ function DisplayImages(props) {
 										/>
 									</Box>
 								</Grid>
-								<Grid item container xs={4}>
+								<Grid item container xs={15}  sm={4}>
 									<Grid xs={12} item sx={{ height: "50px" }}>
 										<Stack display={"flex"} alignItems="center" flexDirection={"row"}>
 											<Avatar
-												src={`http://192.168.0.170:8080/${userInfo.image}`}
+												src={`http://${baseURL}/${userInfo.image}`}
 												sx={{ height: "40px", width: "40px", marginRight: "10px" }}
 											/>
 											<Typography>

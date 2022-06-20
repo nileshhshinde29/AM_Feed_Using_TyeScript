@@ -49,6 +49,7 @@ import Moment from 'react-moment';
 import moment from "moment";
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Emoji from './emoji'
+import { baseURL } from '../../utils/constants/urls'
 
 
 
@@ -81,7 +82,7 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 function Cards(props: any) {
     const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
 
-    const [images, setImages] = useState(props?.data?.image?.map((imgs: any, i: any) => `http://192.168.0.170:8080/${imgs.filename}`) || [])
+    const [images, setImages] = useState(props?.data?.image?.map((imgs: any, i: any) => `http://${baseURL}/${imgs.filename}`) || [])
     const [likess, setLikes] = useState(props.data?.likes?.map((item: any) => item._id).includes(userInfo._id) ? true : false)
     const [comments, setComments] = useState(props?.data?.comments || [])
     const [savePost, setSavePost] = useState(false)
@@ -211,7 +212,7 @@ function Cards(props: any) {
             <Card className="card" >
                 <CardHeader
                     avatar={
-                        <Avatar sx={{ bgcolor: red[500] }} src={`http://192.168.0.170:8080/${props.data?.createdBy?.image}`} aria-label="recipe">
+                        <Avatar sx={{ bgcolor: red[500] }} src={`http://${baseURL}/${props.data?.createdBy?.image}`} aria-label="recipe">
                             R
                         </Avatar>
                     }

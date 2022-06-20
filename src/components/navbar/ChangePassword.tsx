@@ -61,7 +61,8 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
     // border: `2px solid ${theme.palette.background.paper}`,
 }));
 export default function ProfileUpdateModal(props: any) {
-    const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
+
+    // const userInfo = JSON.parse(localStorage.getItem<any>("currentUser")) || "";
 
 
     const [open1, setOpen1] = React.useState({})

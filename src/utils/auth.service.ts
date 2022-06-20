@@ -6,6 +6,7 @@ import history from "../routes/history";
 import { paths } from "../routes/routes.config";
 import { showErrorToast, showSuccessToast } from "./toastUtil";
 import { defaultUsers } from "../@types/user";
+import {baseURL} from '../utils/constants/urls'
 
 let currentUserFromStorage: any;
 
@@ -32,6 +33,8 @@ const currentOrganizationSubject = new BehaviorSubject(
     currentUserFromStorage._org[0]) ||
     undefined
 );
+
+
 
 /*
  * Export as a Type
@@ -88,7 +91,7 @@ function verifyCredentials(payload: any) {
   //   resolve(true);
   // });
 
-  return post("http://192.168.0.170:8080/auth/login", payload)
+  return post(`http://${baseURL}/auth/login`, payload)
     .then((response: any) => {
       //   handleLogin(response)
       console.log(response.token)
@@ -111,7 +114,7 @@ function verifyCredentials(payload: any) {
 function forgotPassword(payload: any) {
     
   return post(
-    "http://192.168.0.170:8080/auth/forgot-password",
+    `http://${baseURL}/auth/forgot-password`,
     payload
   );
 }
@@ -121,7 +124,7 @@ function forgotPassword(payload: any) {
  */
 function requestPasswordReset(payload: any) {
   return post(
-    `http://192.168.0.170:8080/auth/reset-password?token=${payload.token}`,payload.obj
+    `http://${baseURL}/auth/reset-password?token=${payload.token}`,payload.obj
   ).then((response: any) => {
     return response;
   });
@@ -132,7 +135,7 @@ function requestPasswordReset(payload: any) {
 function ChangePassword(payload: any) {
   
   console.log(payload)
-  return patch(`http://192.168.0.170:8080/users/changePassword`,payload, {
+  return patch(`http://${baseURL}/users/changePassword`,payload, {
     headers: { Authorization: "Bearer " + Cookies.get("_token") },
   });
 }
@@ -209,7 +212,7 @@ function authToken() {
 // }
 
 function register(payload: any) {
-  return post("http://192.168.0.170:8080/auth/register", payload)
+  return post(`http://${baseURL}/auth/register`, payload)
    
 }
 
@@ -255,7 +258,7 @@ function isUserAndTokenAvailable() {
  * Fetch current user
  */
 function loadCurrentUser() {
- return  get(`http://192.168.0.170:8080/auth/self`)
+ return  get(`http://${baseURL}/auth/self`)
     
     // .then((response: any) => {
 
@@ -291,7 +294,7 @@ function handleLogin(response: any) {
 
 function sendVerification(payload: any) {
   console.log(payload)
-  return post("http://192.168.0.170:8080/auth/send-verification-email",{}, {
+  return post(`http://${baseURL}/auth/send-verification-email`,{}, {
     headers: {
       Authorization: "Bearer " + payload,
     },
@@ -301,7 +304,7 @@ function sendVerification(payload: any) {
 function verifySentMail(payload: any) {
   
  return post(
-    `http://192.168.0.170:8080/auth/verify-email?token=${payload}`,{}
+    `http://${baseURL}/auth/verify-email?token=${payload}`,{}
   ).then((response: any) => {
     return response;
   });
@@ -313,7 +316,7 @@ function AddPost(payload: any) {
   
   console.log(payload)
 
-  return post("http://192.168.0.170:8080/posts",
+  return post(`http://${baseURL}/posts`,
     payload,
     {
       headers: {
@@ -327,7 +330,7 @@ function AddPost(payload: any) {
 
 function getPosts(page:any) {
   return get(
-    `http://192.168.0.170:8080/posts?page=${page}&limit=2`, {
+    `http://${baseURL}/posts?page=${page}&limit=2`, {
 
     headers: { Authorization: "Bearer " +Cookies.get("_token") },
   });
@@ -336,7 +339,7 @@ function getPosts(page:any) {
 // like the post
 
 function like(id:any) {
-  return patch(`http://192.168.0.170:8080/posts/${id}/like`, {
+  return patch(`http://${baseURL}/posts/${id}/like`, {
     headers: { Authorization: "Bearer " + Cookies.get("_token") },
   });
 }
@@ -345,7 +348,7 @@ function like(id:any) {
 function addComment(id: any, comment: any) {
   
 
-  return patch(`http://192.168.0.170:8080/posts/${id}/comment`, comment, {
+  return patch(`http://${baseURL}/posts/${id}/comment`, comment, {
     headers: { Authorization: "Bearer " + Cookies.get("_token") },
   });
 
@@ -353,14 +356,14 @@ function addComment(id: any, comment: any) {
 
 //reply on comment
 function replyToComment(id: any ,reply:any) {
-  return patch(`http://192.168.0.170:8080/posts/comments/${id}/reply`, {reply:reply}, {
+  return patch(`http://${baseURL}/posts/comments/${id}/reply`, {reply:reply}, {
     headers: {Authorization : "Bearer " + Cookies.get("_token")}
   })
 
 }
 //like to comment
 function likeToComment(id: any ,reply:any) {
-  return patch(`http://192.168.0.170:8080/posts/comments/${id}/like`, {
+  return patch(`http://${baseURL}/posts/comments/${id}/like`, {
     headers: {Authorization : "Bearer " + Cookies.get("_token")}
   })
 
@@ -368,7 +371,7 @@ function likeToComment(id: any ,reply:any) {
 
 //like to reply
 function likeToReply(id: any, reply: any) {
-  return patch(`http://192.168.0.170:8080/posts/comments/replies/${id}/like`, {
+  return patch(`http://${baseURL}/posts/comments/replies/${id}/like`, {
     headers: { Authorization: "Bearer " + Cookies.get("_token") },
   });
 }
@@ -376,7 +379,7 @@ function likeToReply(id: any, reply: any) {
 //get Saved posts
 function getSavedPosts(userId : any) {
   return get(
-    `http://192.168.0.170:8080/users/${userId}/savedPosts`, {
+    `http://${baseURL}/users/${userId}/savedPosts`, {
 
     headers: { Authorization: "Bearer " +Cookies.get("_token") },
   });
@@ -384,21 +387,21 @@ function getSavedPosts(userId : any) {
 
 // save post 
 function savePost(userId: any, postId: any) {
-  return patch(`http://192.168.0.170:8080/users/${userId}/savePost/${postId}`, {
+  return patch(`http://${baseURL}/users/${userId}/savePost/${postId}`, {
     headers: { Authorization: "Bearer " + Cookies.get("_token") },
   });
 }
 
 //upload profile pic
 function uploadProfilePic(userId: any, pic: any) {
-  return patch(`http://192.168.0.170:8080/users/${userId}/profile_pic`, pic, {
+  return patch(`http://${baseURL}/users/${userId}/profile_pic`, pic, {
     headers: { Authorization: "Bearer " + Cookies.get("_token") },
   });
 }
 
 // update Profile Information
 function uploadProfileInfo(userId: any, data:any) {
-  return patch(`http://192.168.0.170:8080/users/${userId}/`, data, {
+  return patch(`http://${baseURL}/users/${userId}/`, data, {
     headers: { Authorization: "Bearer " + Cookies.get("_token") },
   });
 }

@@ -6,7 +6,7 @@ import { authenticationService } from '../utils/auth.service'
 const Routes = ({ component: Component, ...rest }) => (
     <Route
         {...rest}
-        render={(props) => {
+        render={(props:any) => {
             if (!authenticationService.currentUserValue) {
                 return (
                     <Redirect

@@ -24,7 +24,8 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import Emoji from "../emoji";
 import DisplayLikedPeoples from './DisplayLikedPeoples'
-
+import { baseURL } from '../../../utils/constants/urls'
+ 
 
 // import CommentsModal from "../home/Modal/CommentsModal";
 
@@ -54,7 +55,7 @@ export default function BasicModal(props) {
 
   const [images, setImages] = React.useState(
     props?.data?.image?.map(
-      (imgs: any , i: any) => `http://192.168.0.170:8080/${imgs.filename}`
+      (imgs, i) => `http://${baseURL}/${imgs.filename}`
     ) || []
   );
   const [data, setdata] = React.useState(props?.comments);
@@ -184,15 +185,18 @@ export default function BasicModal(props) {
           alignItems: "center",
           justifyContent: "center",
           border: "1 solid white",
+          overflowY: 'scroll',
+          overflowX: 'hidden',
         }}
       >
-        <Box sx={{ height: "500px", width: "800px", backgroundColor: "white" }}>
+        <Box sx={{ height: "auto", maxWidth: '800px', backgroundColor: "white", overflow: 'hidden'  }}>
           <Grid xs={12} container sx={{ height: "100%", width: "100%" }}>
-            <Grid item xs={6.8} className="center" sx={{ height: "100%" }}>
+            {/* <Grid item xs={6.8} className="center" sx={{ height: "100%" }}> */}
+              <Grid item xs={12} sm={6.8} className="center" sx={{ height: "100%" }}>
               <>
                 <Box
                   className="container1"
-                  sx={{ maxWidth: 450, marginLeft: "-5px" }}
+                  sx={{ maxWidth: 450, marginLeft: "-5px", overflowWrap:'true'  }}
                 >
                   <AutoPlaySwipeableViews
                     axis={theme.direction === "rtl" ? "x-reverse" : "x"}
@@ -270,14 +274,16 @@ export default function BasicModal(props) {
                 </Box>
               </>
             </Grid>
-            <Grid container className="center" item xs={5.2} >
+            {/* <Grid container className="center" item xs={5.2} > */}
+            <Grid container className="center" item xs={13} sm={5.2} >
+
               <Grid xs={12} minHeight="100px" item sx={{ width: "100%" }} >
                 <CardHeader
                   sx={{ height: "30px" }}
                   avatar={
                     <Avatar
                       // sx={{ bgcolor: red[500] }}
-                      src={`http://192.168.0.170:8080/${props.data?.createdBy.image}`}
+                      src={`http://${baseURL}/${props.data?.createdBy.image}`}
                       aria-label="recipe"
                     >
                       R

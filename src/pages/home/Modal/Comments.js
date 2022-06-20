@@ -8,6 +8,7 @@ import { authenticationService } from '../../../utils/auth.service'
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentLike from './CommentLike'
 import ReplyLike from './replyLike'
+import { baseURL } from '../../../utils/constants/urls'
 
 
 function Comments(props) {
@@ -80,7 +81,7 @@ function Comments(props) {
                 avatar={
                   <Avatar
                     sx={{ height: "30px", width: "30px" }}
-                    src={`http://192.168.0.170:8080/${item?.commentedBy?.image}`}
+                    src={`http://${baseURL}/${item?.commentedBy?.image}`}
                     aria-label="recipe"
                   ></Avatar>
                 }
@@ -199,7 +200,7 @@ function Comments(props) {
                       <Grid item xs={2}>
                         <Avatar
                           sx={{ height: "20px", width: "20px" }}
-                          src={`http://192.168.0.170:8080/${it?.repliedBy?.image}`}
+                          src={`http://${baseURL}/${it?.repliedBy?.image}`}
                           aria-label="recipe"
                         ></Avatar>
                       </Grid>

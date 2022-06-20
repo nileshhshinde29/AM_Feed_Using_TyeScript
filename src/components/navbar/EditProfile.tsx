@@ -23,6 +23,7 @@ import Slide from '@mui/material/Slide';
 import { showErrorToast, showSuccessToast } from "../../utils/toastUtil";
 import { setDefaultResultOrder } from 'dns/promises';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
+import { baseURL } from '../../utils/constants/urls'
 
 
 
@@ -62,7 +63,7 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
     // border: `2px solid ${theme.palette.background.paper}`,
 }));
 export default function ProfileUpdateModal(props: any) {
-    const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
+    const userInfo = JSON.parse(localStorage.getItem("currentUser")!) || "";
     
 
     const [open1 , setOpen1]=React.useState({})
@@ -124,7 +125,7 @@ export default function ProfileUpdateModal(props: any) {
             formData.append('DOB', watch('DOB'))
             formData.append('mobile', watch('mobile'))
 
-            authenticationService.uploadProfileInfo(userInfo._id, formData).then(res => { props.selfFetching(); showSuccessToast('Profile updated sucessfuly'); props.closed(prv => ({ ...prv, edit: false })) }).catch(e => console.log(e))
+            authenticationService.uploadProfileInfo(userInfo._id, formData).then(res => { props.selfFetching(); showSuccessToast('Profile updated sucessfuly'); props.closed((prv:any)=> ({ ...prv, edit: false })) }).catch(e => console.log(e))
 
         }
        
@@ -176,7 +177,7 @@ export default function ProfileUpdateModal(props: any) {
                                     
                                     >
 
-                                        <Avatar  src={watch("image")?.name ? URL.createObjectURL(watch('image')) : `http://192.168.0.170:8080/${watch('image')}`} sx={{ width: 60, height: 60 }} />
+                                    <Avatar src={watch("image")?.name ? URL.createObjectURL(watch('image')) : `http://${baseURL}/${watch('image')}`} sx={{ width: 60, height: 60 }} />
                                 </Badge>
                                 <input
                                     style={{ display: "none" }}

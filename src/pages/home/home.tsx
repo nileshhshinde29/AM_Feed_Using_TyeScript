@@ -122,16 +122,16 @@ export default function Login() {
             <b>Yay! You have seen it all</b>
           </p>
         }
-        loader={<><Container className="container "><Box sx={{ width: 450, marginRight: 0.5, my: 5 }}>
+        loader={<><Container className="container "><Box sx={{ width: 450, marginRight: 0.5 ,padding:0}}>
+          <Card className='Card'>
           <Stack spacing={1}>
-            <Skeleton variant="text" />
+            <Skeleton variant="text" width={"100%"}/>
             <Skeleton variant="circular" width={40} height={40} />
-            <Skeleton variant="rectangular" width={450} height={400} />
-            <Skeleton variant="rectangular" width={450} height={10} />
-            <Skeleton variant="rectangular" width={450} height={20} />
-            <Skeleton variant="rectangular" width={450} height={10} />
-            <Skeleton variant="rectangular" width={450} height={30} />
-          </Stack>
+            <Skeleton variant="rectangular" width={'100%'} height={400} />
+            <Skeleton variant="text" width={"100%"} />
+            <Skeleton variant="text" width={"100%"} />
+            </Stack>
+            </Card>
         </Box>
         </Container>
         </>}

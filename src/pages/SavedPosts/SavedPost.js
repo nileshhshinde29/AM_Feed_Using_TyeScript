@@ -1,4 +1,4 @@
-import { Grid, Stack } from '@mui/material'
+import { Grid, Skeleton, Stack } from '@mui/material'
 import { Box, margin, padding } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
@@ -25,6 +25,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 function SavedPost() {
+  const BaseUrl = "localhost:8080"
   const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
   const [savedPost, setSavedPost] = useState([])
   const [index, setIndex]= useState(0)
@@ -94,20 +95,22 @@ function SavedPost() {
   
 
   return (
-      <Stack display="flex" alignItems="center">
-      <Box sx={{  width: "1000px", marginTop: "80px", height: "auto" ,padding:'30px'  }}>
+    <Stack display="flex" alignItems="center" justifyContent='center'  >
+      <Stack display="flex" alignItems="center" justifyContent='center' marginTop={"80px"} >
+      {/* <Box sx={{  width: "1000px", marginTop: "80px", height: "auto" ,padding:'30px'  }}> */}
+         
         
         
-          <Grid container spacing={4}>
+          <Grid container spacing={8} xs={12}>
            
           
           {
             savedPost?.map((item, i) => 
               
-              <Grid item xs={4} key={i} >
+              <Grid item xs={12}  sm={4} key={i}  >
              
                     
-                <img src={`http://192.168.0.170:8080/${item.image[0].filename}`} height="280px" width="250px" onClick={() => { setIndex(i); setComments(savedPost[i]?.comments); setLikeLength(savedPost[i]?.likes?.length); setOpen(!open) }} />
+                {item.image[0]   ? <img src={`http://${BaseUrl}/${item.image[0].filename}`} height="280px" width="250px" onClick={() => { setIndex(i); setComments(savedPost[i]?.comments); setLikeLength(savedPost[i]?.likes?.length); setOpen(!open) }} /> : <Skeleton variant="rectangular" animation="wave" width={"250px"} height='300px' />}
 
                
               </Grid>
@@ -117,12 +120,13 @@ function SavedPost() {
           </Grid>
 
         
-      </Box>
+      {/* </Box> */}
       {/* <CommentsModal open={open} setOpen={setOpen} comments={comments}
         data={props.data} likess={likess} setLikes={likePost}
         setComment={setComment} setComments={setComments} likess={likess} setLikes={likePost} /> */}
 
       {open && <CommentsModal savePost={savePost} saveThisPost={saveThisPost} likesLength={likesLength} setLikeLength={setLikeLength} open={open} setOpen={setOpen} likess={likess} setLikes={likePost} data={savedPost[index]} comments={comments} setComment={setComment} setComments={setComments} />}
+      </Stack>
       </Stack>
 
   )

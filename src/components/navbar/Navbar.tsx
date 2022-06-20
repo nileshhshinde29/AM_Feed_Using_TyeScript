@@ -26,6 +26,7 @@ import history from "../../routes/history";
 import EditProfile from '../navbar/EditProfile'
 import { authenticationService } from "../../utils/auth.service";
 import ChangePassword from './ChangePassword'
+import { baseURL } from '../../utils/constants/urls'
 
 export type NavbarProps = {
   /**
@@ -40,7 +41,7 @@ export type NavbarProps = {
 
 
 export const Navbar = ({ onLogout }: NavbarProps) => {
-  const userInfo = JSON.parse(localStorage.getItem("currentUser")) || "";
+  const userInfo = JSON.parse(localStorage.getItem("currentUser")!) || "";
   const [openAddPost, setOpenAddPost] = useState(false)
   const [openModal, setModal] = useState({
     edit: false,
@@ -93,6 +94,7 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        overflow:'initial',
 
         color: "black",
         minHeight: "60px",
@@ -108,8 +110,9 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
         variant="dense"
         sx={{
           width: "70%",
-          minWidth: "450px",
+          minWidth: "400px",
           display: "flex",
+
           justifyContent: "space-between",
           alignItems: "center",
         }}
@@ -146,7 +149,7 @@ export const Navbar = ({ onLogout }: NavbarProps) => {
                   aria-haspopup="true"
                   aria-expanded={open ? 'true' : undefined}
                 >
-                  <Avatar src={`http://192.168.0.170:8080/${initialValues.image}`} sx={{ height: "25px", width: "25px", marginRight: '10px' } } />
+                  <Avatar src={`http://${baseURL}/${initialValues.image}`} sx={{ height: "25px", width: "25px", marginRight: '10px' } } />
                   {userInfo.firstname} {userInfo.lastname}
                 </Button>
                 
