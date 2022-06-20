@@ -293,7 +293,6 @@ function handleLogin(response: any) {
 //* send verification mail
 
 function sendVerification(payload: any) {
-  console.log(payload)
   return post(`http://${baseURL}/auth/send-verification-email`,{}, {
     headers: {
       Authorization: "Bearer " + payload,
